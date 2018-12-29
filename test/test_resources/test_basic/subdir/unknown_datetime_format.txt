@@ -1,0 +1,15 @@
+{Aug 30 14_32_28 2018} discriminate
+{Aug 30 14_32_29 2018} chair
+{Aug 30 14_32_30 2018} retailer
+{Aug 30 14_32_30 2018} tropical
+{Aug 30 14_32_31 2018} responsibility
+{Aug 30 14_32_32 2018} tropical
+{Aug 30 14_32_33 2018} hunter
+{Aug 30 14_32_33 2018} drum
+{Aug 30 14_32_33 2018} result
+{Aug 30 14_32_33 2018} tropical
+{Aug 30 14_32_34 2018} tropical
+{Aug 30 14_32_34 2018} cook
+{Aug 30 14_32_34 2018} conspiracy
+{Aug 30 14_32_34 2018} suntan
+{Aug 30 14_32_36 2018} }tropical
