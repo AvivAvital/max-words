@@ -5,7 +5,7 @@ from directoryHandler import DirectoryHandler
 from fileHandler import FileHandler
 from collections import Counter
 from logger import Logger
-from os.path import isfile,abspath
+from os.path import isfile, abspath
 
 
 class WordCounter(Logger):

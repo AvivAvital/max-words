@@ -31,13 +31,10 @@ class ArgParser(Logger):
                                  help='Activate debug logs')
 
         self.args = self.parser.parse_args()
+        
         if self.args.debug:
             super().__init__(log_level='DEBUG')
 
         word_count = WordCounter()
         result = word_count.count(self.args.num_of_words, *self.args.file_or_dir)
         word_count.print_results(result)
-
-
-if __name__ == '__main__':
-    ArgParser()
