@@ -32,9 +32,9 @@ class TestBasic(object):
         yield
 
     @pytest.mark.parametrize('num_of_words, filenames, expected',[
-        (5, ['five_repetative_items.txt'], [('suntan', 5), ('expenditure', 4), ('tropical', 4), ('kick', 3), ('shatter', 2)]),
-        (3, ['five_repetative_items.txt'], [('suntan', 5), ('expenditure', 4), ('tropical', 4)]),
-        (1, ['five_repetative_items.txt','ten_items_with_two_known.txt'], [('suntan', 6)])
+        pytest.param(5, ['five_repetative_items.txt'], [('suntan', 5), ('expenditure', 4), ('tropical', 4), ('kick', 3), ('shatter', 2)],id='test_one_file_5_most_common'),
+        pytest.param(1, ['five_repetative_items.txt','ten_items_with_two_known.txt'], [('suntan', 6)], id='test_two_file_most_common_word'),
+        pytest.param(1, ['.'], [('tropical', 8)], id='test_recursive_most_common_word')
     ])
     def test_basic(self, test_helper, num_of_words, filenames, expected):
         files = [os.path.join(os.path.splitext(test_helper.test_dir)[0], filename) for filename in filenames]
