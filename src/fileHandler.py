@@ -26,7 +26,7 @@ class FileHandler(Logger):
         :return: collections.Counter object
         """
         self.logger.debug('Reading file {0}'.format(filename))
-        with open(filename, 'rt') as file_handler:
+        with open(filename, 'rt', encoding='utf-8') as file_handler:
             self.read_lines_from_file(file_handler=file_handler)
 
         return self._counter

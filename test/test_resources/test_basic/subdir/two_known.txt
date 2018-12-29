@@ -1,6 +1,7 @@
 discriminate
 chair
 retailer
+tropical
 responsibility
 tropical
 hunter
