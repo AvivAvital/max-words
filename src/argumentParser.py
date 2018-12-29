@@ -31,7 +31,7 @@ class ArgParser(Logger):
                                  help='Activate debug logs')
 
         self.args = self.parser.parse_args()
-        
+
         if self.args.debug:
             super().__init__(log_level='DEBUG')
 
