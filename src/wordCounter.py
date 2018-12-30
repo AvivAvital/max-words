@@ -22,7 +22,7 @@ class WordCounter(Logger):
 
         _counter = Counter()
         self.most_common_words = most_common_words
-        _root_dir = DirectoryHandler(max_dir_depth=2)
+        _root_dir = DirectoryHandler()
         for path in map(abspath, args):
             if isfile(path):
                 _counter += FileHandler().file_word_count(filename=path)
