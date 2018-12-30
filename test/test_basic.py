@@ -14,7 +14,7 @@ class Helper(object):
         self.word_counter = WordCounter()
 
     def execute(self, *handles):
-        return self.word_counter.count(*handles)
+        return self.word_counter.count_must(*handles)
 
     def print_results(self, result):
         return self.word_counter.print_results(result)

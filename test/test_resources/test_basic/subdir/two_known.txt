@@ -1,15 +1,15 @@
-Aug 30 14:32:28 discriminate
-Aug 30 14:32:29 chair
-Aug 30 14:32:30 retailer
-Aug 30 14:32:30 tropical
-Aug 30 14:32:31 responsibility
-Aug 30 14:32:32 tropical
-Aug 30 14:32:33 hunter
-Aug 30 14:32:33 drum
-Aug 30 14:32:33 result
-Aug 30 14:32:33 tropical
-Aug 30 14:32:34 tropical
-Aug 30 14:32:34 cook
-Aug 30 14:32:34 conspiracy
-Aug 30 14:32:34 suntan
-Aug 30 14:32:36 tropical
+Sun Aug 30 14:32:28 IDT 2015 discriminate
+Sun Aug 30 14:32:29 IDT 2015 chair
+Sun Aug 30 14:32:30 IDT 2015 retailer
+Sun Aug 30 14:32:30 IDT 2015 tropical
+Sun Aug 30 14:32:31 IDT 2015 responsibility
+Sun Aug 30 14:32:32 IDT 2015 tropical
+Sun Aug 30 14:32:33 IDT 2015 hunter
+Sun Aug 30 14:32:33 IDT 2015 drum
+Sun Aug 30 14:32:33 IDT 2015 result
+Sun Aug 30 14:32:33 IDT 2015 tropical
+Sun Aug 30 14:32:34 IDT 2015 tropical
+Sun Aug 30 14:32:34 IDT 2015 cook
+Sun Aug 30 14:32:34 IDT 2015 conspiracy
+Sun Aug 30 14:32:34 IDT 2015 suntan
+Sun Aug 30 14:32:36 IDT 2015 tropical

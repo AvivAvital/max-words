@@ -1,11 +1,11 @@
-from argparse import ArgumentParser, RawTextHelpFormatter
-from wordCounter import WordCounter
-from logger import Logger
+from argparse import ArgumentParser, RawTextHelpFormatter, Namespace
 from textwrap import dedent
+from logger import Logger
 
 
 class ArgParser(Logger):
     def __init__(self):
+        super().__init__(log_level='INFO')
         self.parser = ArgumentParser(description='Find the most common words in given file/dir path(s)',
                                      formatter_class=RawTextHelpFormatter,
                                      usage='%(prog)s [-h] num_of_words filename_or_directory [filename_or_directory ...] [--debug]',
@@ -21,20 +21,7 @@ class ArgParser(Logger):
                                  type=int,
                                  help='Amount of most common words returned')
 
-        self.parser.add_argument('file_or_dir',
-                                 nargs='*',
-                                 help='Absolute path to file(s) or directory/directories')
+        self.args = Namespace()
 
-        self.parser.add_argument('--debug',
-                                 action='store_true',
-                                 default=False,
-                                 help='Activate debug logs')
-
+    def parse(self):
         self.args = self.parser.parse_args()
-
-        if self.args.debug:
-            super().__init__(log_level='DEBUG')
-
-        word_count = WordCounter()
-        result = word_count.count(self.args.num_of_words, *self.args.file_or_dir)
-        word_count.print_results(result)
