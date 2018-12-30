@@ -28,6 +28,11 @@ def test_helper():
 class TestBasic(object):
     @pytest.fixture(autouse=True)
     def before_after(self, test_helper):
+        try:
+            os.remove('report.html')
+        except FileNotFoundError:
+            pass
+
         test_helper.test_name = os.path.basename(__file__)
         yield
 

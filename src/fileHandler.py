@@ -1,5 +1,6 @@
 from logger import Logger
 from collections import Counter
+from dateParser import DateParser
 
 
 class FileHandler(Logger):
@@ -11,14 +12,14 @@ class FileHandler(Logger):
         super().__init__()
         self._counter = Counter()
 
-    def read_lines_from_file(self, file_handler):
+    def read_lines_from_file(self, file_handler, date_time_length):
         """
         :param file_handler: TextIOWrapper - File handler object
         This method iterates line-by-line over a file handler using a generator.
         Each line is stripped from CRLF and split using a space delimiter and sent to a collections.Counter
         """
         for line in file_handler:
-            self._counter += Counter(line.strip().split(' '))
+            self._counter += Counter(line[date_time_length:].strip().split(' '))
 
     def file_word_count(self, filename):
         """
@@ -27,6 +28,8 @@ class FileHandler(Logger):
         """
         self.logger.debug('Reading file {0}'.format(filename))
         with open(filename, 'rt', encoding='utf-8') as file_handler:
-            self.read_lines_from_file(file_handler=file_handler)
+            _parsed_datetime = DateParser(file_handler).is_date_format_known()
+            if _parsed_datetime:
+                self.read_lines_from_file(file_handler=file_handler, date_time_length=_parsed_datetime)
 
         return self._counter
