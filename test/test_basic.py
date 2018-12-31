@@ -14,7 +14,7 @@ class Helper(object):
         self.word_counter = WordCounter()
 
     def execute(self, *handles):
-        return self.word_counter.count(*handles)
+        return self.word_counter.count_must(*handles)
 
     def print_results(self, result):
         return self.word_counter.print_results(result)
@@ -28,6 +28,11 @@ def test_helper():
 class TestBasic(object):
     @pytest.fixture(autouse=True)
     def before_after(self, test_helper):
+        try:
+            os.remove('report.html')
+        except FileNotFoundError:
+            pass
+
         test_helper.test_name = os.path.basename(__file__)
         yield
 
