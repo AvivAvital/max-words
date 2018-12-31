@@ -9,6 +9,7 @@ from datetime import datetime
 class AdvantageParser(ArgParser):
     def __init__(self):
         super().__init__()
+        self.word_counter = WordCounter()
         self.parser.add_argument('date_or_timestamp',
                                  # nargs='+',
                                  type=self.csv_list,
@@ -88,18 +89,29 @@ class AdvantageParser(ArgParser):
         """
         :return: Parses command line arguments and return aggregated word count
         """
+
         self.args = self.parser.parse_args()
-        word_counter = WordCounter()
-        datetime_search_criteria = []
         if self.args.debug:
             Logger.__init__(self, log_level='DEBUG')
 
-        if len(self.args.date_or_timestamp) == 1:
-            item = self.args.date_or_timestamp.pop()
+        result = self.do_count(self.args.num_of_words, self.args.date_or_timestamp)
+        self.word_counter.print_results(result)
+
+    def do_count(self, num_of_words, date_or_timestamp, path='/var/log/'):
+        """
+        This method does all the heavy lifting. It was originally a part of parse() but separated for testability
+        :param num_of_words: The number of words to return as the most common words
+        :param date_or_timestamp: Timestamp or timestamp range, either epoch or datetime as follows: Sat Mar 12 00:00:00 IDT 2011
+        :param path: String - Alternative path to /var/log/, used for testability
+        :return: WordCounter - Returns a collections.Counter object, with x amount of Counter.most_common(num_of_words)
+        """
+        datetime_search_criteria = []
+        if len(date_or_timestamp) == 1:
+            item = date_or_timestamp.pop()
             datetime_search_criteria.append(self.decide_on_input(item))
         else:
-            for item in self.args.date_or_timestamp:
+            for item in date_or_timestamp:
                 datetime_search_criteria.append(self.decide_on_input(item))
 
-        result = word_counter.count_advantage(self.args.num_of_words, datetime_search_criteria)
-        word_counter.print_results(result)
+        return self.word_counter.count_advantage(num_of_words, datetime_search_criteria, path)
+
