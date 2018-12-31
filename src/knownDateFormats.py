@@ -2,13 +2,12 @@ import re
 from singleton_decorator import singleton
 
 
-"""This class holds all handled date formats.
-Values for each key hold known files under /var/log/ that correspond with the file format"""
-
 @singleton
 class KnownDateFormats:
+    """This class holds all handled date formats.
+    Values for each key hold known files under /var/log/ that correspond with the file format"""
     def __init__(self):
-        self.yyyymmddhhmmssfff = re.compile(r'(?<=[)\d*:\d*:\d*,\d*(?=])')
+        self.yyyymmddhhmmssfff = re.compile('(?<=\[)\d*-\d*-\d*.\d*:\d*:\d*,\d*(?=\])')
         self.DDDMMMddhhmmssIDTYYYY = re.compile(r'.+\d*:\d*:\d*\sIDT\s\d*')
         self.MMMddhhmmss = re.compile(r'.+\d*:\d*:\d*')
         self.format_matcher = {

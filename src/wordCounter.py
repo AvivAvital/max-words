@@ -36,23 +36,20 @@ class WordCounter(Logger):
         self.logger.debug("size of counter is {0} MB".format(round(getsizeof(_counter) / 1024 / 1024), 3))
         return _counter.most_common(self.most_common_words)
 
-    def count_advantage(self, most_common_words, **kargs):
+    def count_advantage(self, most_common_words, datetime_search_criteria):
         """
         :param most_common_words: Integer - Number of most common words in all files
+        :param datetime_search_criteria: List - Contains all items/ranges of datetime to look for in directory
         :return: Integer - Number of most common words
         """
 
         _counter = Counter()
         self.most_common_words = most_common_words
         _root_dir = DirectoryHandler()
-        _path = '/var/log/'
+        _path = r'C:\git\word_count\max-words\test\test_resources\test_basic\subdir\unicode_subdir'
 
-        # if 'single_epoch' in kargs:
-
-
-
-        with ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
-            future_file_counts = {executor.submit(FileHandler().file_word_count, _filename):
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            future_file_counts = {executor.submit(FileHandler().file_word_count, _filename, datetime_search_criteria):
                                       _filename for _filename in _root_dir.scan_dir(_path)}
 
             for future in as_completed(future_file_counts):

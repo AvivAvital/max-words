@@ -1,9 +1,8 @@
-import re
 from argumentParser import ArgParser
 from logger import Logger
 from wordCounter import WordCounter
 from dateParser import DateParser
-from exceptionHandler import InvalidDateTimeException, InvalidDateTimeRangeException
+from exceptionHandler import *
 from datetime import datetime
 
 
@@ -11,14 +10,18 @@ class AdvantageParser(ArgParser):
     def __init__(self):
         super().__init__()
         self.parser.add_argument('date_or_timestamp',
-                                 nargs='*',
-                                 type=str,
-                                 help='')
+                                 # nargs='+',
+                                 type=self.csv_list,
+                                 help='timestamp/datetime format')  # Todo: Fix description
 
         self.parser.add_argument('--debug',
                                  action='store_true',
                                  default=False,
                                  help='Activate debug logs')
+
+    @staticmethod
+    def csv_list(string):
+        return string.split(',')
 
     @staticmethod
     def is_datetime_or_epoch(item):
@@ -49,41 +52,56 @@ class AdvantageParser(ArgParser):
         if _beg[1] and _end[1]:
             return _beg, _end
         elif not (_beg[1] and _end[1]):
-            return _beg[0], _beg[0]  # Only return beginning and end of epoch range
+            if not _beg[0] < _end[0]:
+                raise InvalidRangeException
+            return _beg, _end  # Only return beginning and end of epoch range
         raise InvalidDateTimeRangeException
 
+    def decide_on_input(self, item_range):
+        """
+        This method tests for all valid single/multi-items and return date objects
+        :param item_range: List/String - Either range (dash delimited), or singular item (String or datetime)
+        :return: datetime object(s) - Either datetime, tuple(datetime_start,datetime_end)
+        :raises InvalidDateTimeRangeException, InvalidDateTimeException or InvalidRangeException
+        """
+        range_handler = self.is_range(item_range)
+        if not range_handler[1]:  # Single epoch
+            return datetime.utcfromtimestamp(range_handler[0])
+
+        elif isinstance(range_handler[1], datetime):  # Single datetime
+            return range_handler[1]
+
+        elif isinstance(range_handler, tuple):
+            if not range_handler[1][1]:  # Multiple epoch
+                begin = datetime.utcfromtimestamp(range_handler[0][0])
+                end = datetime.utcfromtimestamp(range_handler[1][0])
+                return begin, end
+
+            elif isinstance(range_handler[1][1], datetime):  # Multiple datetime
+                begin = range_handler[0][1]
+                end = range_handler[1][1]
+                return begin, end
+            else:
+                raise InvalidDateTimeRangeException
+        else:
+            raise InvalidDateTimeException
+
     def parse(self):
+        """
+        :return: Parses command line arguments and return aggregated word count
+        """
         self.args = self.parser.parse_args()
+        word_counter = WordCounter()
+        datetime_search_criteria = []
         if self.args.debug:
             Logger.__init__(self, log_level='DEBUG')
 
-        time_and_date_ranges = self.args.date_or_timestamp.split(',')
-        word_count = WordCounter()
-        result = ''
+        if len(self.args.date_or_timestamp) == 1:
+            item = self.args.date_or_timestamp.pop()
+            datetime_search_criteria.append(self.decide_on_input(item))
+        else:
+            for item in self.args.date_or_timestamp:
+                datetime_search_criteria.append(self.decide_on_input(item))
 
-        for item_range in time_and_date_ranges:
-            range_handler = self.is_range(item_range)
-            if not range_handler[1]:
-                # Single epoch
-                result = word_count.count_advantage(self.args.num_of_words, single_epoch=range_handler[0])
-
-            elif isinstance(range_handler[1], datetime):
-                # Single datetime
-                result = word_count.count_advantage(self.args.num_of_words, single_datetime=range_handler)
-
-            elif isinstance(range_handler[1], tuple):
-                if isinstance(range_handler[1][0], int):
-                    # Multiple epoch
-                    result = word_count.count_advantage(self.args.num_of_words, multi_epoch=range_handler[1])
-
-                elif isinstance(range_handler[1][1], datetime):
-                    # Multiple datetime
-                    result = word_count.count_advantage(self.args.num_of_words, multi_datetime=range_handler[1])
-                    word_count.print_results(result)
-                else:
-                    raise InvalidDateTimeRangeException
-
-        word_count.print_results(result)
-
-
-
+        result = word_counter.count_advantage(self.args.num_of_words, datetime_search_criteria)
+        word_counter.print_results(result)
