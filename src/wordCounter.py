@@ -24,11 +24,10 @@ class WordCounter(Logger):
         _counter = Counter()
         self.most_common_words = most_common_words
         _root_dir = DirectoryHandler()
-        _path = r'C:\git\word_count\max-words\test\test_resources'
 
         with ThreadPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
             future_file_counts = {executor.submit(FileHandler().file_word_count, _filename, datetime_search_criteria):
-                                      _filename for _filename in _root_dir.scan_dir(_path)}
+                                      _filename for _filename in _root_dir.scan_dir(path)}
 
             for future in as_completed(future_file_counts):
                 _counter += future.result()

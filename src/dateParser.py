@@ -11,9 +11,13 @@ class DateParser:
         :param file_handler: io.TextIOWrapper object
         :return: Calls is_date_format_known
         """
-        _line = file_handler.readline()
-        file_handler.seek(0)
-        return self.is_date_format_known(_line)
+        try:
+            _line = file_handler.readline()
+        except UnicodeDecodeError:
+            return None,None
+        else:
+            file_handler.seek(0)
+            return self.is_date_format_known(_line)
 
     def is_date_format_known(self, string):
         """

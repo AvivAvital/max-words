@@ -24,14 +24,18 @@ class FileHandler(Logger):
         """
 
         for line in file_handler:
-            datetime_string = datetime.strptime(line[:date_time_length], date_time_format)
-            for criteria in datetime_search_criteria:
-                if not isinstance(criteria, tuple):  # Not a range
-                    if criteria == datetime_string:
-                        self._counter += Counter(line[date_time_length+1:].strip().split(' '))
-                else:  # If range
-                    if criteria[0] <= datetime_string <= criteria[1]:
-                        self._counter += Counter(line[date_time_length+1:].strip().split(' '))
+            if any(character.isdigit() for character in line[:date_time_length]):
+                try:
+                    datetime_string = datetime.strptime(line[:date_time_length], date_time_format)
+                    for criteria in datetime_search_criteria:
+                        if not isinstance(criteria, tuple):  # Not a range
+                            if criteria == datetime_string:
+                                self._counter += Counter(line[date_time_length+1:].strip().split(' '))
+                        else:  # If range
+                            if criteria[0] <= datetime_string <= criteria[1]:
+                                self._counter += Counter(line[date_time_length+1:].strip().split(' '))
+                except ValueError:
+                    pass  # Skip file if datetime format is not consistent or not known
 
     def file_word_count(self, filename, datetime_search_criteria):
         """
