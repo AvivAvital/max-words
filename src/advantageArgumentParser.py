@@ -71,16 +71,14 @@ class AdvantageParser(ArgParser):
         elif isinstance(range_handler[1], datetime):  # Single datetime
             return range_handler[1]
 
-        elif isinstance(range_handler, tuple):
-            if not range_handler[1][1]:  # Multiple epoch
-                begin = datetime.utcfromtimestamp(range_handler[0][0])
-                end = datetime.utcfromtimestamp(range_handler[1][0])
-                return begin, end
+        elif isinstance(range_handler, tuple):  # Multiple epoch
+            if not range_handler[1][1]:
+                _begin, _end = [datetime.utcfromtimestamp(item[0]) for item in range_handler]
+                return _begin, _end
 
             elif isinstance(range_handler[1][1], datetime):  # Multiple datetime
-                begin = range_handler[0][1]
-                end = range_handler[1][1]
-                return begin, end
+                _begin, _end = [item[1] for item in range_handler]
+                return _begin, _end
             else:
                 raise InvalidDateTimeRangeException
         else:
